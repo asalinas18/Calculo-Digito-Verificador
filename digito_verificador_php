@@ -1,0 +1,40 @@
+function calcularDigitoVerificador($p_ruc, $p_basemax = 11) {
+	$p_rucStr = strval($p_ruc);
+	$v_numero_al = "";
+	$k = 2;
+	$v_total = 0;
+	$v_numero_aux = $v_resto = $v_digito = "";
+
+	for ($i = 0; $i < strlen($p_rucStr); $i++) {
+		$v_caracter = strtoupper(substr($p_rucStr, $i, 1));
+		$v_caracterAscii = ord($v_caracter);
+
+		if ($v_caracterAscii >= 48 && $v_caracterAscii <= 57) {
+			$v_numero_al .= $v_caracter;
+		} else {
+			$v_numero_al .= $v_caracterAscii;
+		}
+	}
+
+	for ($i = strlen($v_numero_al); $i > 0; $i--) {
+		if ($k > $p_basemax) {
+			$k = 2;
+		}
+
+		$digito = substr($v_numero_al, $i - 1, 1);
+		$v_numero_aux = intval($digito);
+		$v_total += $v_numero_aux * $k;
+
+		$k++;
+	}
+
+	$v_resto = $v_total % 11;
+
+	if ($v_resto > 1) {
+		$v_digito = 11 - $v_resto;
+	} else {
+		$v_digito = 0;
+	}
+
+	return $v_digito;
+}
